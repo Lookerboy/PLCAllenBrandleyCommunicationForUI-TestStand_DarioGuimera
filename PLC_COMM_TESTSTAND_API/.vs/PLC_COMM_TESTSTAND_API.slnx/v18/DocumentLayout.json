@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\PLC_To_PC_Tunez\\PLC_COMM_TESTSTAND_API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{42A5E3FB-FD90-072B-581D-164995E448A8}|PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj|c:\\plc_to_pc_tunez\\plc_comm_teststand_api\\plc_comm_teststand_api\\api_teststand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{42A5E3FB-FD90-072B-581D-164995E448A8}|PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj|solutionrelative:plc_comm_teststand_api\\api_teststand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{42A5E3FB-FD90-072B-581D-164995E448A8}|PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj|c:\\plc_to_pc_tunez\\plc_comm_teststand_api\\plc_comm_teststand_api\\plc_comm_teststand_api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{42A5E3FB-FD90-072B-581D-164995E448A8}|PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj|solutionrelative:plc_comm_teststand_api\\plc_comm_teststand_api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PLC_COMM_TESTSTAND_API.csproj",
+              "DocumentMoniker": "C:\\PLC_To_PC_Tunez\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj",
+              "RelativeDocumentMoniker": "PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj",
+              "ToolTip": "C:\\PLC_To_PC_Tunez\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj",
+              "RelativeToolTip": "PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-25T15:50:02.689Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "API_TESTSTAND.cs",
+              "DocumentMoniker": "C:\\PLC_To_PC_Tunez\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API\\API_TESTSTAND.cs",
+              "RelativeDocumentMoniker": "PLC_COMM_TESTSTAND_API\\API_TESTSTAND.cs",
+              "ToolTip": "C:\\PLC_To_PC_Tunez\\PLC_COMM_TESTSTAND_API\\PLC_COMM_TESTSTAND_API\\API_TESTSTAND.cs",
+              "RelativeToolTip": "PLC_COMM_TESTSTAND_API\\API_TESTSTAND.cs",
+              "ViewState": "AgIAADIFAAAAAAAAAADwvzgFAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T15:48:45.747Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

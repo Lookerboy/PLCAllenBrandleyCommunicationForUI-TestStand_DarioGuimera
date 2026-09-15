@@ -1,0 +1,59 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "PLC_COMM_TESTSTAND_API/1.0.0": {
+        "dependencies": {
+          "libplctag": "1.5.1"
+        },
+        "runtime": {
+          "PLC_COMM_TESTSTAND_API.dll": {}
+        }
+      },
+      "libplctag/1.5.1": {
+        "dependencies": {
+          "libplctag.NativeImport": "1.0.40"
+        },
+        "runtime": {
+          "lib/netstandard2.0/libplctag.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
+          }
+        }
+      },
+      "libplctag.NativeImport/1.0.40": {
+        "runtime": {
+          "lib/netstandard2.0/libplctag.NativeImport.dll": {
+            "assemblyVersion": "1.0.40.0",
+            "fileVersion": "1.0.40.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PLC_COMM_TESTSTAND_API/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "libplctag/1.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-15ifnTaAh6wYpBAUPkuRofoXBzPR53Xg4zcP6DPPujTZRmlwNUT5zEa31uZwE6GeITjy0bvogICY1ZqK53OJlA==",
+      "path": "libplctag/1.5.1",
+      "hashPath": "libplctag.1.5.1.nupkg.sha512"
+    },
+    "libplctag.NativeImport/1.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qaCpxfH9LvlHeMpvPolR44h0Epmi5xtpXQ5I6HsXgq2wRnNplzJ8rnS9eXpOxa5AtxByPE2WUIicw/UDNFyu/Q==",
+      "path": "libplctag.nativeimport/1.0.40",
+      "hashPath": "libplctag.nativeimport.1.0.40.nupkg.sha512"
+    }
+  }
+}

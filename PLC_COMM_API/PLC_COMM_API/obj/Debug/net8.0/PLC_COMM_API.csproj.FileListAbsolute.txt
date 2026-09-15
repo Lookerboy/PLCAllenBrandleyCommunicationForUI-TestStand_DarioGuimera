@@ -1,0 +1,12 @@
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\bin\Debug\net8.0\PLC_COMM_API.deps.json
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\bin\Debug\net8.0\PLC_COMM_API.dll
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\bin\Debug\net8.0\PLC_COMM_API.pdb
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.csproj.AssemblyReference.cache
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.GeneratedMSBuildEditorConfig.editorconfig
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.AssemblyInfoInputs.cache
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.AssemblyInfo.cs
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.csproj.CoreCompileInputs.cache
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.dll
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\refint\PLC_COMM_API.dll
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\PLC_COMM_API.pdb
+C:\PLC_To_PC_Tunez\PLC_COMM_API\PLC_COMM_API\obj\Debug\net8.0\ref\PLC_COMM_API.dll

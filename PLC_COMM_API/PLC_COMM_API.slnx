@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PLC_COMM_API/PLC_COMM_API.csproj">
+    <BuildType Project="Release" />
+  </Project>
+</Solution>
