@@ -31,6 +31,8 @@ Las pruebas requieren el checkout hermano `UIDinamicaControlar_DarioGuimera` com
 
 ## Limites
 
+La entrega Release de la API UI esta en `PLC_COMM_API/PLC_COMM_API/bin/Release/net8.0/PLC_COMM_API.dll`. Compilada sin simbolos, SHA256 `A356C9FEA9955CB827A7FC6A132716687508DFB026C0034134052A4BEA285D9E`; coincide con la copia de View y con el publish x86 del runtime. Se repitieron las suites offline/ABI y de protocolo local en proceso x86 contra esa DLL. El PDB historico de la carpeta no corresponde a esta build. No se sustituye la DLL TestStand ni libplctag por este arreglo.
+
 La serializacion protege las operaciones del mismo cliente. Una escritura de un tag empaquetado sigue enviando su buffer: no ofrece atomicidad frente a escrituras de otro programa o del propio PLC. Para comandos de movimiento usar tags con propiedad clara y un watchdog/interbloqueo en el PLC: si se corta la red o falla el PC, la UI no puede garantizar que llegue la liberacion. El programa PLC y las pruebas fisicas siguen pendientes.
 
 No se ha hecho una refactorizacion general de tipos, arquitectura de TestStand, polling numerico o protocolo. Los cambios se limitan a finalizacion de escrituras de UI, operaciones BOOL y sus consumidores manuales.
