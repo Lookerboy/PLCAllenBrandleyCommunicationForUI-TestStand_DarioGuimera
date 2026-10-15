@@ -1,4 +1,4 @@
-﻿using libplctag;
+using libplctag;
 using libplctag.DataTypes;
 using System.Data;
 using System.Globalization;
@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace PLC_COMM_API
 {
-    public class API_UI
+    public partial class API_UI
     {
         List<Tag> Tags = new List<Tag>();
         string APIGateWay = "192.168.1.10";
@@ -19,6 +19,12 @@ namespace PLC_COMM_API
 
         public void AddVariable(string VariableName, int Type, int ArrayLength = 1, int TimeOut = 500)
         {
+            if (Type == 2)
+            {
+                AddBoolVariable(VariableName, ArrayLength, TimeOut);
+                return;
+            }
+
             int TagElementSize = 1;
             int TagElementCount = 1;
 
@@ -114,19 +120,14 @@ namespace PLC_COMM_API
 
         public void CloseConnection()
         {
-            foreach(var tag in Tags)
+            var errors = new List<Exception>();
+            try { CloseBoolVariables(); } catch (Exception ex) { errors.Add(ex); }
+            foreach (var tag in Tags)
             {
-                try
-                {
-                    tag.Dispose();
-                }
-                catch(Exception e)
-                {
-                    throw new Exception($"{e.Message}");
-                }
+                try { tag.Dispose(); } catch (Exception ex) { errors.Add(ex); }
             }
-
             Tags.Clear();
+            if (errors.Count > 0) throw new AggregateException("Error al cerrar conexion Allen Bradley.", errors);
         }
 
         public async Task<string> GetVariableString(string VariableName)
@@ -263,101 +264,8 @@ namespace PLC_COMM_API
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public async Task<bool> GetVariableBool(string VariableName)
-        {
-            int Count;
-            int Count_Retry;
-            Tag CurrentTag = null;
-            for (Count = 0; Count < Tags.Count; Count++)
-            {
-                if (Tags[Count].Name == VariableName)
-                {
-                    CurrentTag = Tags[Count];
-                    break;
-                }
-            }
 
-            if (Count == Tags.Count)
-            {
-                throw new Exception("Variable doesn't exists in the current context"); //The variable doesnt exists in the API.
-            }
 
-            for (Count_Retry = 0; Count_Retry < Max_Retyr_nmb; Count_Retry++)
-            {
-                try
-                {
-                    await CurrentTag.ReadAsync();
-
-                    return CurrentTag.GetBit(0);
-                }
-                catch (Exception ex)
-                {
-                    if (Count_Retry == Max_Retyr_nmb - 1)
-                    {
-                        throw new Exception($"Fallo al leer {VariableName}: {ex.Message}");
-                    }
-
-                    await Task.Delay(Retry_Delay);
-                }
-            }
-
-            return false;
-        }
-
-        public async Task<List<bool>> GetVariableArrayBool(string VariableName)
-        {
-            List<bool> ReturnValue = new List<bool>();
-            int Count;
-            int Count_Retry;
-            Tag CurrentTag = null;
-            for (Count = 0; Count < Tags.Count; Count++)
-            {
-                if (Tags[Count].Name == VariableName)
-                {
-                    CurrentTag = Tags[Count];
-                    break;
-                }
-            }
-
-            if (Count == Tags.Count)
-            {
-                throw new Exception("Variable doesn't exists in the current context");
-            }
-
-            for (Count_Retry = 0; Count_Retry < Max_Retyr_nmb; Count_Retry++)
-            {
-                try
-                {
-                    await CurrentTag.ReadAsync();
-
-                    for (Count = 0; Count < CurrentTag.ElementCount * 32; Count++)
-                    {
-                        ReturnValue.Add(CurrentTag.GetBit(Count));
-                    }
-
-                    return ReturnValue;
-                }
-                catch (Exception ex)
-                {
-                    if (Count_Retry == Max_Retyr_nmb - 1)
-                    {
-                        throw new Exception($"Fallo al leer {VariableName}: {ex.Message}");
-                    }
-
-                    await Task.Delay(Retry_Delay);
-                }
-            }
-
-            return ReturnValue;
-        }
-
-        public async Task<bool> GetIndexArrayBool(string VariableName, int Index)
-        {
-            List<bool> FullArray = new List<bool>();
-            FullArray = await GetVariableArrayBool(VariableName);
-
-            return FullArray[Index];
-        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1395,6 +1303,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1453,6 +1362,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1474,110 +1384,15 @@ namespace PLC_COMM_API
 
             FullArray[Index] = VariableValue;
 
-            SetVariableArrayString(VariableName, FullArray);
+            await SetVariableArrayString(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public async Task SetVariableBool(string VariableName, bool VariableValue)
-        {
-            int Count;
-            int Count_Retry;
-            Tag CurrentTag = null;
-            for (Count = 0; Count < Tags.Count; Count++)
-            {
-                if (Tags[Count].Name == VariableName)
-                {
-                    CurrentTag = Tags[Count];
-                    break;
-                }
-            }
 
-            if (Count == Tags.Count)
-            {
-                throw new Exception("Variable doesn't exists in the current context"); //The variable doesnt exists in the API.
-            }
 
-            for (Count_Retry = 0; Count_Retry < Max_Retyr_nmb; Count_Retry++)
-            {
-                try
-                {
-                    await CurrentTag.ReadAsync();
-
-                    CurrentTag.SetBit(0, VariableValue);
-
-                    await CurrentTag.WriteAsync();
-                }
-                catch (Exception ex)
-                {
-                    if (Count_Retry == Max_Retyr_nmb - 1)
-                    {
-                        throw new Exception($"Fallo al leer {VariableName}: {ex.Message}");
-                    }
-
-                    await Task.Delay(Retry_Delay);
-                }
-            }
-        }
-
-        public async Task SetVariableArrayBool(string VariableName, List<bool> VariableValues)
-        {
-            List<bool> ReturnValue = new List<bool>();
-            int Count;
-            int Count_Retry;
-            Tag CurrentTag = null;
-            for (Count = 0; Count < Tags.Count; Count++)
-            {
-                if (Tags[Count].Name == VariableName)
-                {
-                    CurrentTag = Tags[Count];
-                    break;
-                }
-            }
-
-            if (Count == Tags.Count)
-            {
-                throw new Exception("Variable doesn't exists in the current context");
-            }
-
-            for (Count_Retry = 0; Count_Retry < Max_Retyr_nmb; Count_Retry++)
-            {
-                try
-                {
-                    if (VariableValues.Count > CurrentTag.ElementCount * 32)
-                        throw new Exception("You exceeded the maximum number of array length");
-
-                    await CurrentTag.ReadAsync();
-
-                    for (Count = 0; Count < VariableValues.Count; Count++)
-                    {
-                        CurrentTag.SetBit(Count, VariableValues[Count]);
-                    }
-                    await CurrentTag.WriteAsync();
-                }
-                catch (Exception ex)
-                {
-                    if (Count_Retry == Max_Retyr_nmb - 1)
-                    {
-                        throw new Exception($"Fallo al leer {VariableName}: {ex.Message}");
-                    }
-
-                    await Task.Delay(Retry_Delay);
-                }
-            }
-
-        }
-
-        public async Task SetIndexArrayBool(string VariableName, int Index, bool VariableValue)
-        {
-            List<bool> FullArray = new List<bool>();
-            FullArray = await GetVariableArrayBool(VariableName);
-
-            FullArray[Index] = VariableValue;
-            SetVariableArrayBool(VariableName, FullArray);
-        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1613,6 +1428,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetInt8(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1661,6 +1477,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1681,7 +1498,7 @@ namespace PLC_COMM_API
 
             FullArray[Index] = VariableValue;
 
-            SetVariableArrayInt8(VariableName, FullArray);
+            await SetVariableArrayInt8(VariableName, FullArray);
         }
 
 
@@ -1712,6 +1529,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetUInt8(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1760,6 +1578,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1780,7 +1599,7 @@ namespace PLC_COMM_API
 
             FullArray[Index] = VariableValue;
 
-            SetVariableArrayUInt8(VariableName, FullArray);
+            await SetVariableArrayUInt8(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1815,6 +1634,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetInt16(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1863,6 +1683,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1882,7 +1703,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayInt16(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayInt16(VariableName, FullArray);
+            await SetVariableArrayInt16(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1912,6 +1733,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetUInt16(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1960,6 +1782,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -1979,7 +1802,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayUInt16(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayUInt16(VariableName, FullArray);
+            await SetVariableArrayUInt16(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2014,6 +1837,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetInt32(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2062,6 +1886,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2081,7 +1906,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayInt32(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayInt32(VariableName, FullArray);
+            await SetVariableArrayInt32(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2111,6 +1936,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetUInt32(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2159,6 +1985,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2178,7 +2005,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayUInt32(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayUInt32(VariableName, FullArray);
+            await SetVariableArrayUInt32(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2213,6 +2040,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetInt64(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2261,6 +2089,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2280,7 +2109,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayInt64(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayInt64(VariableName, FullArray);
+            await SetVariableArrayInt64(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2316,6 +2145,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetUInt64(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2364,6 +2194,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2383,7 +2214,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayUInt64(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayUInt64(VariableName, FullArray);
+            await SetVariableArrayUInt64(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2418,6 +2249,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetFloat32(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2466,6 +2298,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2485,7 +2318,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayReal(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayReal(VariableName, FullArray);
+            await SetVariableArrayReal(VariableName, FullArray);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2520,6 +2353,7 @@ namespace PLC_COMM_API
                     CurrentTag.SetFloat64(0, VariableValue);
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2567,6 +2401,7 @@ namespace PLC_COMM_API
                     }
 
                     await CurrentTag.WriteAsync();
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -2586,7 +2421,7 @@ namespace PLC_COMM_API
             FullArray = await GetVariableArrayLReal(VariableName);
 
             FullArray[Index] = VariableValue;
-            SetVariableArrayLReal(VariableName, FullArray);
+            await SetVariableArrayLReal(VariableName, FullArray);
         }
     }
 }
